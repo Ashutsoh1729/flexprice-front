@@ -10,7 +10,7 @@ import { BUCKET_SIZE, Meter, METER_AGGREGATION_TYPE, METER_USAGE_RESET_PERIOD } 
 import FeatureApi from '@/api/FeatureApi';
 import { useMutation } from '@tanstack/react-query';
 import { Gauge, SquareCheckBig, Wrench } from 'lucide-react';
-import { useMemo, useState, useCallback } from 'react';
+import { useMemo, useState, useCallback, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { LuCircleFadingPlus, LuRefreshCw } from 'react-icons/lu';
 import { useNavigate } from 'react-router-dom';
@@ -464,9 +464,17 @@ const AggregationSection = ({
 
 	const [multiplierInput, setMultiplierInput] = useState(meter.aggregation?.multiplier?.toString() || '');
 
+	useEffect(() => {
+		// only update local state if the prop value actually changed externally
+		const currentValue = meter.aggregation?.multiplier?.toString() || '';
+		if (currentValue !== multiplierInput) {
+			setMultiplierInput(currentValue);
+		}
+	}, [meter.aggregation?.multiplier]);
+
 	const handleMultiplierChange = useCallback(
 		(value: string) => {
-			// Allow empty string or valid decimal numbers
+			// Allow only valid numeric/decimal input
 			if (/^\d*\.?\d*$/.test(value)) {
 				setMultiplierInput(value);
 
