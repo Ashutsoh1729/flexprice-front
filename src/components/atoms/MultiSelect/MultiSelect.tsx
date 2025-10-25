@@ -172,68 +172,78 @@ const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>(
 						{...props}
 						onClick={handleTogglePopover}
 						className={cn(
-							'flex w-full p-1 rounded-md border h-8 items-center justify-between bg-inherit hover:bg-inherit [&_svg]:pointer-events-auto',
+							'flex w-full px-3 py-2 rounded-md border h-10 items-center justify-between bg-inherit hover:bg-inherit [&_svg]:pointer-events-auto',
 							triggerClassName,
 							className,
 						)}>
 						{selectedValues.length > 0 ? (
-							<div className='flex justify-between items-center w-full'>
-								<div className='flex flex-wrap items-center'>
-									{selectedValues.slice(0, maxCount).map((value) => {
-										const option = options.find((o) => o.value === value);
-										const IconComponent = option?.icon;
-										return (
+							<div className='flex items-center w-full min-w-0'>
+								{/* Selected items container - use all available space */}
+								<div className='flex items-center flex-1 min-w-0 overflow-hidden'>
+									<div className='flex items-center gap-1 overflow-x-auto scrollbar-hide w-full'>
+										{selectedValues.slice(0, maxCount).map((value) => {
+											const option = options.find((o) => o.value === value);
+											const IconComponent = option?.icon;
+											return (
+												<Badge
+													key={value}
+													className={cn(
+														'flex items-center gap-1 px-2 py-1 text-xs whitespace-nowrap shrink-0 flex-1 min-w-0',
+														isAnimating ? 'animate-bounce' : '',
+														multiSelectVariants({ variant }),
+													)}
+													style={{ animationDuration: `${animation}s` }}>
+													{IconComponent && <IconComponent className='h-3 w-3 shrink-0' />}
+													<span className='truncate flex-1' title={option?.label}>
+														{option?.label}
+													</span>
+													<XCircle
+														className='h-3 w-3 cursor-pointer shrink-0 hover:text-destructive'
+														onClick={(event) => {
+															event.stopPropagation();
+															toggleOption(value);
+														}}
+													/>
+												</Badge>
+											);
+										})}
+										{selectedValues.length > maxCount && (
 											<Badge
-												key={value}
-												className={cn(isAnimating ? 'animate-bounce' : '', multiSelectVariants({ variant }))}
+												className={cn(
+													'flex items-center gap-1 px-2 py-1 text-xs whitespace-nowrap shrink-0 bg-muted text-muted-foreground border-muted-foreground/20',
+													isAnimating ? 'animate-bounce' : '',
+												)}
 												style={{ animationDuration: `${animation}s` }}>
-												{IconComponent && <IconComponent className='h-4 w-4 mr-2' />}
-												{option?.label}
+												<span>+{selectedValues.length - maxCount}</span>
 												<XCircle
-													className='ml-2 h-4 w-4 cursor-pointer'
+													className='h-3 w-3 cursor-pointer shrink-0 hover:text-destructive'
 													onClick={(event) => {
 														event.stopPropagation();
-														toggleOption(value);
+														clearExtraOptions();
 													}}
 												/>
 											</Badge>
-										);
-									})}
-									{selectedValues.length > maxCount && (
-										<Badge
-											className={cn(
-												'bg-transparent text-foreground border-foreground/1 hover:bg-transparent',
-												isAnimating ? 'animate-bounce' : '',
-												multiSelectVariants({ variant }),
-											)}
-											style={{ animationDuration: `${animation}s` }}>
-											{`+ ${selectedValues.length - maxCount} more`}
-											<XCircle
-												className='ml-2 h-4 w-4 cursor-pointer'
-												onClick={(event) => {
-													event.stopPropagation();
-													clearExtraOptions();
-												}}
-											/>
-										</Badge>
-									)}
+										)}
+									</div>
 								</div>
-								<div className='flex items-center justify-between'>
+
+								{/* Controls container - minimal spacing */}
+								<div className='flex items-center gap-1 ml-2 shrink-0'>
 									<XIcon
-										className='h-4 mx-2 cursor-pointer text-muted-foreground'
+										className='h-4 w-4 cursor-pointer text-muted-foreground hover:text-destructive'
 										onClick={(event) => {
 											event.stopPropagation();
 											handleClear();
 										}}
 									/>
-									<Separator orientation='vertical' className='flex min-h-6 h-full' />
-									<ChevronDown className='h-4 mx-2 cursor-pointer text-muted-foreground' />
+									<Separator orientation='vertical' className='h-4' />
+									<ChevronDown className='h-4 w-4 text-muted-foreground' />
 								</div>
 							</div>
 						) : (
-							<div className='flex items-center justify-between w-full mx-auto'>
-								<span className='text-sm text-muted-foreground mx-3'>{placeholder}</span>
-								<ChevronDown className='h-4 cursor-pointer text-muted-foreground mx-2' />
+							<div className='flex items-center justify-between w-full'>
+								<span className='text-muted-foreground truncate pl-1 font-normal'>{placeholder}</span>
+								<ChevronDown className='h-4 w-4 text-muted-foreground shrink-0' />
 							</div>
 						)}
 					</Button>

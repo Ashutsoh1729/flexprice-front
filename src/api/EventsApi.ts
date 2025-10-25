@@ -9,6 +9,7 @@ import {
 	GetUsageAnalyticsRequest,
 	GetUsageAnalyticsResponse,
 } from '@/types/dto';
+import { PRICE_UNIT_TYPE } from '@/models/Price';
 
 class EventsApi {
 	private static baseUrl = '/events';
@@ -43,7 +44,9 @@ class EventsApi {
 	 * This endpoint directly calls the v2 backend without feature flag logic
 	 */
 	public static async getUsageAnalyticsV2(payload: GetUsageAnalyticsRequest): Promise<GetUsageAnalyticsResponse> {
-		return await AxiosClient.post<GetUsageAnalyticsResponse>(`${EventsApi.baseUrl}/analytics/v2`, payload);
+		// console.log('payload', payload);
+		// return Promise.resolve(dummyData);
+		return await AxiosClient.post<GetUsageAnalyticsResponse>(`${EventsApi.baseUrl}/analytics-v2`, payload);
 	}
 }
 
