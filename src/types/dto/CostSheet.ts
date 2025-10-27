@@ -1,10 +1,6 @@
 import { Pagination, CostSheet, Metadata, Price } from '@/models';
 import { TypedBackendFilter, TypedBackendSort } from '../formatters/QueryBuilder';
 
-export interface ExtendedCostSheet extends CostSheet {
-	prices: Price[];
-}
-
 export interface CreateCostSheetRequest {
 	name: string;
 	lookup_key: string;
@@ -36,7 +32,7 @@ export interface GetCostSheetsPayload {
 	lookup_keys?: string[];
 }
 
-export interface GetCostSheetsResponse extends Pagination {
+export interface GetCostSheetsResponse {
 	items: CostSheetResponse[];
 	pagination: Pagination;
 }

@@ -208,7 +208,7 @@ const UsageDataTable: React.FC<{ items: UsageAnalyticItem[] }> = ({ items }) => 
 	// Define table columns
 	const columns: ColumnData<UsageAnalyticItem>[] = [
 		{
-			title: 'Fetaure',
+			title: 'Feature',
 			render: (row: UsageAnalyticItem) => {
 				return <span>{row.name || row.name || 'Unknown'}</span>;
 			},

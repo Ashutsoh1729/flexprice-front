@@ -5,19 +5,13 @@ import { Page, Card, Button, Input, DateRangePicker, FeatureMultiSelect } from '
 import CostAnalyticsApi from '@/api/CostAnalyticsApi';
 import toast from 'react-hot-toast';
 import { Loader, RefreshCw } from 'lucide-react';
-import { GetCombinedAnalyticsRequest, GetCombinedAnalyticsResponse } from '@/types/dto/CostAnalytics';
+import { GetCombinedAnalyticsRequest } from '@/types/dto/CostAnalytics';
 import Feature from '@/models/Feature';
-
-// Type guard to check if data is GetCombinedAnalyticsResponse
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const isCombinedAnalytics = (data: any): data is GetCombinedAnalyticsResponse => {
-	return 'total_revenue' in data && 'margin' in data;
-};
 import { WindowSize } from '@/models';
-import FlexpriceTable, { ColumnData } from '@/components/molecules/Table';
-import { CostAnalyticItem } from '@/types/dto/CostAnalytics';
 import { formatNumber } from '@/utils/common';
 import { ApiDocsContent } from '@/components/molecules';
+import { isCombinedAnalytics } from '@/utils/cost-analytics';
+import { CostDataTable } from '@/components/molecules/CostDataTable';
 
 const CostAnalyticsPage: React.FC = () => {
 	const { updateBreadcrumb } = useBreadcrumbsStore();
@@ -163,11 +157,7 @@ const CostAnalyticsPage: React.FC = () => {
 						return (
 							<div className='grid grid-cols-2 md:grid-cols-4 gap-4'>
 								{/* Revenue Card */}
-								<div className='bg-white border border-gray-200 p-6 relative'>
-									<div className='absolute top-3 right-3 text-green-600 text-xs font-medium px-2 py-1 flex items-center gap-1'>
-										<span>↑</span>
-										<span>0%</span>
-									</div>
+								<div className='bg-white border border-gray-200 p-6'>
 									<p className='text-sm text-gray-600 font-normal mb-2'>Revenue</p>
 									<p className='text-xl font-semibold text-gray-900'>
 										{formatNumber(parseFloat(revenue || '0'), 2)} {costData.currency}
@@ -175,11 +165,7 @@ const CostAnalyticsPage: React.FC = () => {
 								</div>
 
 								{/* Cost Card */}
-								<div className='bg-white border border-gray-200 p-6 relative'>
-									<div className='absolute top-3 right-3 text-red-600 text-xs font-medium px-2 py-1 flex items-center gap-1'>
-										<span>↑</span>
-										<span>0%</span>
-									</div>
+								<div className='bg-white border border-gray-200 p-6'>
 									<p className='text-sm text-gray-600 font-normal mb-2'>Cost</p>
 									<p className='text-xl font-semibold text-gray-900'>
 										{formatNumber(parseFloat(costData.total_cost || '0'), 2)} {costData.currency}
@@ -237,48 +223,6 @@ const CostAnalyticsPage: React.FC = () => {
 				)}
 			</div>
 		</Page>
-	);
-};
-
-const CostDataTable: React.FC<{ items: CostAnalyticItem[] }> = ({ items }) => {
-	// Define table columns
-	const columns: ColumnData<CostAnalyticItem>[] = [
-		{
-			title: 'Cost Attribute',
-			render: (row: CostAnalyticItem) => {
-				return <span>{row.meter_name || row.meter?.name || row.meter_id}</span>;
-			},
-		},
-		{
-			title: 'Total Quantity',
-			render: (row: CostAnalyticItem) => {
-				return <span>{formatNumber(parseFloat(row.total_quantity || '0'))}</span>;
-			},
-		},
-		{
-			title: 'Total Cost',
-			render: (row: CostAnalyticItem) => {
-				return (
-					<span>
-						{formatNumber(parseFloat(row.total_cost || '0'), 2)} {row.currency}
-					</span>
-				);
-			},
-		},
-	];
-
-	// Prepare data for the table
-	const tableData = items.map((item, index) => ({
-		...item,
-		// Ensure we have all required fields for the table
-		id: item.meter_id || `cost-${index}`,
-	}));
-
-	return (
-		<>
-			<h1 className='text-lg font-medium text-gray-900 mb-4'>Cost Breakdown</h1>
-			<FlexpriceTable columns={columns} data={tableData} showEmptyRow />
-		</>
 	);
 };
 

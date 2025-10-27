@@ -141,12 +141,12 @@ const CostSheetsPage = () => {
 			},
 		},
 		shouldProbe: (mainData) => {
-			return mainData?.items.length === 0;
+			return (mainData?.items?.length ?? 0) === 0;
 		},
 	});
 
 	const showEmptyPage = useMemo(() => {
-		return !isLoading && probeData?.items.length === 0 && costSheetsData?.items.length === 0;
+		return !isLoading && (probeData?.items?.length ?? 0) === 0 && (costSheetsData?.items?.length ?? 0) === 0;
 	}, [isLoading, probeData, costSheetsData]);
 
 	const handleOnAdd = () => {

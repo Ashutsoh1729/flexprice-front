@@ -1,10 +1,11 @@
 import { Button, Input, Sheet, Spacer, Textarea } from '@/components/atoms';
-import CostSheet from '@/models/CostSheet';
+import type { CostSheet } from '@/models/CostSheet';
 import { FC, useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import CostSheetApi from '@/api/CostSheetApi';
 import toast from 'react-hot-toast';
 import { refetchQueries } from '@/core/services/tanstack/ReactQueryProvider';
+import { CreateCostSheetRequest, UpdateCostSheetRequest } from '@/types/dto/CostSheet';
 
 interface Props {
 	data?: CostSheet | null;
@@ -27,11 +28,22 @@ const CostSheetDrawer: FC<Props> = ({ data, open, onOpenChange, trigger, refetch
 	const [errors, setErrors] = useState<Partial<Record<keyof CostSheet, string>>>({});
 
 	const { mutate: updateCostSheet, isPending } = useMutation({
-		mutationFn: (data: Partial<CostSheet>) => {
-			if (isEdit) {
-				return CostSheetApi.UpdateCostSheet(data.id!, data as any);
+		mutationFn: (formData: Partial<CostSheet>) => {
+			if (isEdit && data?.id) {
+				const updateRequest: UpdateCostSheetRequest = {
+					name: formData.name,
+					description: formData.description,
+					metadata: formData.metadata,
+				};
+				return CostSheetApi.UpdateCostSheet(data.id, updateRequest);
 			} else {
-				return CostSheetApi.CreateCostSheet(data as any);
+				const createRequest: CreateCostSheetRequest = {
+					name: formData.name!,
+					lookup_key: formData.lookup_key!,
+					description: formData.description,
+					metadata: formData.metadata,
+				};
+				return CostSheetApi.CreateCostSheet(createRequest);
 			}
 		},
 		onSuccess: (_: CostSheet) => {
@@ -39,8 +51,17 @@ const CostSheetDrawer: FC<Props> = ({ data, open, onOpenChange, trigger, refetch
 			onOpenChange?.(false);
 			refetchQueries(refetchQueryKeys);
 		},
-		onError: (error: any) => {
-			toast.error(error.error?.message || `Failed to ${isEdit ? 'update' : 'create'} cost sheet. Please try again.`);
+		onError: (error: ServerError) => {
+			const errorMessage =
+				error &&
+				typeof error === 'object' &&
+				'error' in error &&
+				typeof error.error === 'object' &&
+				error.error !== null &&
+				'message' in error.error
+					? String(error.error.message)
+					: `Failed to ${isEdit ? 'update' : 'create'} cost sheet. Please try again.`;
+			toast.error(errorMessage);
 		},
 	});
 

@@ -47,8 +47,7 @@ const CostSheetTable: FC<Props> = ({ data, onEdit }) => {
 							return await CostSheetApi.DeleteCostSheet(row?.id);
 						}}
 						id={row?.id}
-						editPath={''}
-						isEditDisabled={true}
+						isEditDisabled={!onEdit}
 						isArchiveDisabled={row?.status === 'archived'}
 						refetchQueryKey={'fetchCostSheets'}
 						entityName={row?.name}
