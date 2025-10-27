@@ -39,30 +39,27 @@ const DateRangePicker = ({
 	popoverContentClassName,
 }: Props) => {
 	const [open, setOpen] = useState(false);
-	const [selectedRange, setSelectedRange] = useState<{ from: Date; to: Date } | undefined>({ from: startDate!, to: endDate! });
+	const [selectedRange, setSelectedRange] = useState<{ from: Date; to: Date } | undefined>(undefined);
 
 	const currentMonth = startOfMonth(new Date());
 
 	const handleSelect = (date: { from?: Date; to?: Date } | undefined) => {
 		if (!date) return;
-		setSelectedRange({
-			from: date.from!,
-			to: date.to!,
-		});
+		if (date.from && date.to) {
+			setSelectedRange({
+				from: date.from,
+				to: date.to,
+			});
+		}
 		onChange({ startDate: date.from, endDate: date.to });
-
-		// if (date.from && date.to) {
-		// 	setOpen(false);
-		// }
 	};
 
 	useEffect(() => {
-		// if (startDate === undefined || endDate === undefined) {
-		// 	setSelectedRange(undefined);
-		// } else {
-		// 	setSelectedRange({ from: startDate, to: endDate });
-		// }
-		setSelectedRange({ from: startDate!, to: endDate! });
+		if (startDate && endDate) {
+			setSelectedRange({ from: startDate, to: endDate });
+		} else {
+			setSelectedRange(undefined);
+		}
 	}, [startDate, endDate]);
 
 	// useEffect(() => {

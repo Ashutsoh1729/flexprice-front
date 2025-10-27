@@ -38,14 +38,18 @@ export const CostDataTable: React.FC<CostDataTableProps> = ({ items }) => {
 	];
 
 	// Prepare data for the table with stable IDs
-	const tableData = items.map((item) => ({
-		...item,
-		// Use meter_id as primary key, fallback to generated ID from stable fields
-		id:
-			item.meter_id ||
-			`item-${[item.meter_name, item.source, item.customer_id || item.external_customer_id, item.price_id].filter(Boolean).join('-')}` ||
-			'unknown-item',
-	}));
+	const tableData = items.map((item, index) => {
+		// Build ID from non-empty fields, fallback to index if empty
+		const fallbackId = [item.meter_name, item.source, item.customer_id || item.external_customer_id, item.price_id]
+			.filter(Boolean)
+			.join('-');
+
+		return {
+			...item,
+			// Use meter_id as primary key, fallback to generated ID from stable fields
+			id: item.meter_id || (fallbackId ? `item-${fallbackId}` : `item-${index}`),
+		};
+	});
 
 	return (
 		<>

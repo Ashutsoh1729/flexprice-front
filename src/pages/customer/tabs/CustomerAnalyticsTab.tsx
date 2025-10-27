@@ -24,8 +24,8 @@ const CustomerAnalyticsTab = () => {
 
 	// Filter states
 	const [selectedFeatures, setSelectedFeatures] = useState<Feature[]>([]);
-	const [startDate, setStartDate] = useState<Date>(new Date(new Date().setDate(new Date().getDate() - 90)));
-	const [endDate, setEndDate] = useState<Date>(new Date());
+	const [startDate, setStartDate] = useState<Date | undefined>(new Date(new Date().setDate(new Date().getDate() - 90)));
+	const [endDate, setEndDate] = useState<Date | undefined>(new Date());
 
 	const {
 		data: customer,
@@ -174,12 +174,8 @@ const CustomerAnalyticsTab = () => {
 	}
 
 	const handleDateRangeChange = ({ startDate: newStartDate, endDate: newEndDate }: { startDate?: Date; endDate?: Date }) => {
-		if (newStartDate) {
-			setStartDate(newStartDate);
-		}
-		if (newEndDate) {
-			setEndDate(newEndDate);
-		}
+		setStartDate(newStartDate);
+		setEndDate(newEndDate);
 	};
 
 	const isLoading = usageLoading || costLoading;
