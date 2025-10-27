@@ -170,7 +170,7 @@ const CustomerCostTab = () => {
 									percentage={roiPercent}
 									showChangeIndicator={true}
 									isNegative={roi < 0}
-									indicatorRightPosition='[12.74px]'
+									indicatorRightPosition='12.74px'
 								/>
 							</div>
 						);

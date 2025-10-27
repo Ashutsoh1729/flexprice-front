@@ -20,7 +20,7 @@ const MetricCard: React.FC<MetricCardProps> = ({
 	percentage = 0,
 	showChangeIndicator = false,
 	isNegative = false,
-	indicatorRightPosition = '[13.46px]',
+	indicatorRightPosition = '13.46px',
 }) => {
 	const valueColor = isNegative ? 'text-[#DC2626]' : 'text-[#111827]';
 	const indicatorColor = isNegative ? 'text-[#DC2626]' : 'text-[#16A34A]';
@@ -35,7 +35,7 @@ const MetricCard: React.FC<MetricCardProps> = ({
 				{getCurrencySymbol(currency)} {formatNumber(value, 2)}
 			</p>
 			{showChangeIndicator && (
-				<div className={`absolute right-${indicatorRightPosition} top-[13px] flex items-center px-2 py-1 gap-[3.99px] z-10`}>
+				<div className='absolute top-[13px] flex items-center px-2 py-1 gap-[3.99px] z-10' style={{ right: indicatorRightPosition }}>
 					<span className={`text-[12px] leading-[18px] font-medium ${indicatorColor}`} style={{ fontFamily: 'Inter' }}>
 						{changeSymbol}
 					</span>
