@@ -152,7 +152,7 @@ const CostAnalyticsPage: React.FC = () => {
 									<MetricCard
 										title='Margin %'
 										value={marginPercent}
-										currency={costData.currency}
+										isPercent={true}
 										showChangeIndicator={true}
 										isNegative={marginPercent < 0}
 									/>

@@ -41,11 +41,11 @@ export const DateTimePicker: React.FC<Props> = ({ date, setDate, disabled, place
 		if (date) {
 			const newDate = new Date(date);
 			if (type === 'hour') {
-				const hour = parseInt(value);
+				const hour = parseInt(value, 10);
 				const isPM = newDate.getHours() >= 12;
-				newDate.setHours(isPM ? hour + 12 : hour);
+				newDate.setHours(isPM ? (hour === 12 ? 12 : hour + 12) : hour === 12 ? 0 : hour);
 			} else if (type === 'minute') {
-				newDate.setMinutes(parseInt(value));
+				newDate.setMinutes(parseInt(value, 10));
 			} else if (type === 'ampm') {
 				const currentHours = newDate.getHours() % 12;
 				newDate.setHours(value === 'PM' ? currentHours + 12 : currentHours);

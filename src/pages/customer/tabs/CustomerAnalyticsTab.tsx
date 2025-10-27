@@ -151,20 +151,26 @@ const CustomerAnalyticsTab = () => {
 		updateBreadcrumb(4, 'Analytics');
 	}, [updateBreadcrumb]);
 
+	useEffect(() => {
+		if (customerError) {
+			toast.error('Error fetching customer data');
+		}
+	}, [customerError]);
+
+	useEffect(() => {
+		if (usageError) {
+			toast.error('Error fetching usage data');
+		}
+	}, [usageError]);
+
+	useEffect(() => {
+		if (costError) {
+			toast.error('Error fetching cost data');
+		}
+	}, [costError]);
+
 	if (customerLoading) {
 		return <Loader />;
-	}
-
-	if (customerError) {
-		toast.error('Error fetching customer data');
-	}
-
-	if (usageError) {
-		toast.error('Error fetching usage data');
-	}
-
-	if (costError) {
-		toast.error('Error fetching cost data');
 	}
 
 	const handleDateRangeChange = ({ startDate: newStartDate, endDate: newEndDate }: { startDate?: Date; endDate?: Date }) => {
@@ -224,7 +230,7 @@ const CustomerAnalyticsTab = () => {
 								<MetricCard
 									title='Margin %'
 									value={marginPercent}
-									currency={costData.currency}
+									isPercent={true}
 									showChangeIndicator={true}
 									isNegative={marginPercent < 0}
 								/>
