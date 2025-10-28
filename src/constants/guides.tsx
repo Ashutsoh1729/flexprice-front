@@ -44,7 +44,7 @@ export enum DOCS_LINKS {
 
 	//taxes
 	TAX_OVERVIEW = 'https://docs.flexprice.io/api-reference/tax-associations/create-tax-associations',
-	TAX_TYPES = 'https://docs.flexprice.io/api-reference/tasks/get-task-processing-result',
+	TAX_TYPES = 'https://docs.flexprice.io/api-reference/tax-associations/get-tax-association',
 	TAX_ASSOCIATIONS = 'https://docs.flexprice.io/api-reference/tax-associations/list-tax-associations',
 }
 
