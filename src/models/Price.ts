@@ -21,7 +21,7 @@ export interface Price extends BaseModel {
 	readonly lookup_key: string;
 	readonly description: string;
 	readonly transform_quantity: TransformQuantity | null;
-	readonly meter: Meter;
+	readonly meter?: Meter;
 	readonly invoice_cadence: INVOICE_CADENCE;
 	readonly trial_period: number;
 	readonly metadata: Metadata | null;
