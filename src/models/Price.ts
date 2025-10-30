@@ -88,3 +88,9 @@ export enum BILLING_PERIOD {
 	QUARTERLY = 'QUARTERLY',
 	HALF_YEARLY = 'HALF_YEARLY',
 }
+
+export enum PRICE_STATUS {
+	UPCOMING = 'upcoming',
+	EXPIRED = 'expired',
+	ACTIVE = 'active',
+}

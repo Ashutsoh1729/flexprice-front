@@ -1,7 +1,7 @@
 import { FC, useCallback, useState } from 'react';
-import { Button, Card, CardHeader, NoDataCard } from '@/components/atoms';
+import { Button, Card, CardHeader, NoDataCard, Chip } from '@/components/atoms';
 import { FlexpriceTable, ColumnData, DropdownMenu, TerminatePriceModal, SyncOption, UpdatePriceDialog } from '@/components/molecules';
-import { Price, Plan } from '@/models';
+import { Price, Plan, PRICE_STATUS } from '@/models';
 import { Plus, Trash2, Pencil } from 'lucide-react';
 import { useMutation } from '@tanstack/react-query';
 import { PriceApi } from '@/api/PriceApi';
@@ -39,6 +39,44 @@ const formatBillingPeriod = (billingPeriod: string) => {
 			return 'Half Yearly';
 		default:
 			return '--';
+	}
+};
+
+const getPriceStatus = (price: Price & { start_date?: string; end_date?: string }): PRICE_STATUS => {
+	const now = new Date();
+
+	// Check if start_date is in the future
+	if (price.start_date && price.start_date.trim() !== '') {
+		const startDate = new Date(price.start_date);
+		// Check if date is valid (not NaN)
+		if (!isNaN(startDate.getTime()) && startDate > now) {
+			return PRICE_STATUS.UPCOMING;
+		}
+	}
+
+	// Check if end_date is in the past
+	if (price.end_date && price.end_date.trim() !== '') {
+		const endDate = new Date(price.end_date);
+		// Check if date is valid (not NaN)
+		if (!isNaN(endDate.getTime()) && endDate < now) {
+			return PRICE_STATUS.EXPIRED;
+		}
+	}
+
+	// Default to active
+	return PRICE_STATUS.ACTIVE;
+};
+
+const getStatusChipVariant = (status: PRICE_STATUS): 'info' | 'failed' | 'success' => {
+	switch (status) {
+		case PRICE_STATUS.UPCOMING:
+			return 'info';
+		case PRICE_STATUS.EXPIRED:
+			return 'failed';
+		case PRICE_STATUS.ACTIVE:
+			return 'success';
+		default:
+			return 'success';
 	}
 };
 
@@ -149,6 +187,15 @@ const PlanPriceTable: FC<PlanChargesTableProps> = ({ plan, onPriceUpdate }) => {
 			title: 'Billing Period',
 			render(rowData) {
 				return <span>{formatBillingPeriod(rowData.billing_period as string)}</span>;
+			},
+		},
+		{
+			title: 'Status',
+			render(rowData) {
+				const status = getPriceStatus(rowData as Price & { start_date?: string; end_date?: string });
+				const variant = getStatusChipVariant(status);
+				const statusLabel = status.charAt(0).toUpperCase() + status.slice(1);
+				return <Chip label={statusLabel} variant={variant} />;
 			},
 		},
 		{
