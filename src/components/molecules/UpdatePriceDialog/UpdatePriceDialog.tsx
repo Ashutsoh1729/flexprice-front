@@ -138,14 +138,6 @@ const UpdatePriceDialog: FC<UpdatePriceDialogProps> = ({ isOpen, onOpenChange, p
 			}
 		}
 
-		// Quantity can be overridden for any billing model
-		if (overrideQuantity !== undefined) {
-			updateData.transform_quantity = {
-				...overrideTransformQuantity,
-				divide_by: overrideQuantity,
-			};
-		}
-
 		// Billing model override
 		if (overrideBillingModel !== price.billing_model) {
 			if (overrideBillingModel === 'SLAB_TIERED') {
@@ -166,8 +158,11 @@ const UpdatePriceDialog: FC<UpdatePriceDialogProps> = ({ isOpen, onOpenChange, p
 		}
 
 		// Only include transform_quantity if billing model is package
-		if (overrideBillingModel === BILLING_MODEL.PACKAGE && overrideTransformQuantity !== undefined) {
-			updateData.transform_quantity = overrideTransformQuantity;
+		if (overrideBillingModel === BILLING_MODEL.PACKAGE) {
+			updateData.transform_quantity = {
+				...overrideTransformQuantity,
+				divide_by: overrideQuantity || overrideTransformQuantity.divide_by,
+			};
 		}
 
 		// Include effective_from if provided
