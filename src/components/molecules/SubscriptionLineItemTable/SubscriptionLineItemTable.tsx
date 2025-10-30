@@ -1,20 +1,49 @@
 import { ActionButton, Card, CardHeader, NoDataCard } from '@/components/atoms';
-import { ChargeValueCell, ColumnData, FlexpriceTable } from '@/components/molecules';
+import { ChargeValueCell, ColumnData, FlexpriceTable, TerminateLineItemModal } from '@/components/molecules';
 import { formatDateShort } from '@/utils/common/helper_functions';
 import { LineItem } from '@/models/Subscription';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { Trash2, Pencil } from 'lucide-react';
 import { ENTITY_STATUS } from '@/models/base';
 import { formatBillingPeriodForDisplay } from '@/utils/common/helper_functions';
+import { Dialog } from '@/components/ui/dialog';
 
 interface Props {
 	data: LineItem[];
 	onEdit?: (lineItem: LineItem) => void;
-	onTerminate?: (lineItemId: string) => void;
+	onTerminate?: (lineItemId: string, endDate?: string) => void;
 	isLoading?: boolean;
 }
 
 const SubscriptionLineItemTable: FC<Props> = ({ data, onEdit, onTerminate, isLoading }) => {
+	const [showTerminateModal, setShowTerminateModal] = useState(false);
+	const [selectedLineItem, setSelectedLineItem] = useState<LineItem | null>(null);
+
+	const handleTerminateClick = (lineItem: LineItem) => {
+		setSelectedLineItem(lineItem);
+		setShowTerminateModal(true);
+	};
+
+	const handleTerminateConfirm = (endDate: string | undefined) => {
+		if (selectedLineItem) {
+			onTerminate?.(selectedLineItem.id, endDate);
+		}
+		setShowTerminateModal(false);
+		setSelectedLineItem(null);
+	};
+
+	const handleTerminateCancel = () => {
+		setShowTerminateModal(false);
+		setSelectedLineItem(null);
+	};
+
+	const handleDialogChange = (open: boolean) => {
+		if (!open) {
+			setShowTerminateModal(false);
+			setSelectedLineItem(null);
+		}
+	};
+
 	const columns: ColumnData<LineItem>[] = [
 		{
 			title: 'Display Name',
@@ -50,7 +79,7 @@ const SubscriptionLineItemTable: FC<Props> = ({ data, onEdit, onTerminate, isLoa
 					archiveText='Terminate'
 					onEdit={() => onEdit?.(row)}
 					deleteMutationFn={async () => {
-						onTerminate?.(row.id);
+						handleTerminateClick(row);
 					}}
 					refetchQueryKey='subscriptionLineItems'
 					id={row.id}
@@ -80,10 +109,19 @@ const SubscriptionLineItemTable: FC<Props> = ({ data, onEdit, onTerminate, isLoa
 	}
 
 	return (
-		<Card variant='notched'>
-			<CardHeader title='Subscription Line Items' />
-			<FlexpriceTable showEmptyRow={false} data={data} columns={columns} />
-		</Card>
+		<>
+			{/* Terminate Line Item Modal */}
+			<Dialog open={showTerminateModal} onOpenChange={handleDialogChange}>
+				{selectedLineItem && (
+					<TerminateLineItemModal onCancel={handleTerminateCancel} onConfirm={handleTerminateConfirm} isLoading={isLoading} />
+				)}
+			</Dialog>
+
+			<Card variant='notched'>
+				<CardHeader title='Subscription Line Items' />
+				<FlexpriceTable showEmptyRow={false} data={data} columns={columns} />
+			</Card>
+		</>
 	);
 };
 

@@ -97,8 +97,8 @@ const CustomerSubscriptionEditPage: React.FC = () => {
 		setIsEditDialogOpen(true);
 	};
 
-	const handleTerminateLineItem = (lineItemId: string) => {
-		terminateLineItem({ lineItemId });
+	const handleTerminateLineItem = (lineItemId: string, endDate?: string) => {
+		terminateLineItem({ lineItemId, endDate });
 	};
 
 	// Convert price override data to subscription line item update data

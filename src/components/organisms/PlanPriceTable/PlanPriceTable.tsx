@@ -209,6 +209,7 @@ const PlanPriceTable: FC<PlanChargesTableProps> = ({ plan, onPriceUpdate }) => {
 			width: '30px',
 			hideOnEmpty: true,
 			render(row) {
+				const hasEndDate = !!(row.end_date && row.end_date.trim() !== '');
 				return (
 					<DropdownMenu
 						options={[
@@ -216,11 +217,13 @@ const PlanPriceTable: FC<PlanChargesTableProps> = ({ plan, onPriceUpdate }) => {
 								label: 'Edit Price',
 								icon: <Pencil />,
 								onSelect: () => handleEditPrice(row),
+								disabled: hasEndDate,
 							},
 							{
 								label: 'Terminate Price',
 								icon: <Trash2 />,
 								onSelect: () => handleTerminatePrice(row.id),
+								disabled: hasEndDate,
 							},
 						]}
 					/>
