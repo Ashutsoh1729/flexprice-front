@@ -14,7 +14,12 @@ export const formatExpirationType = (expirationType: CREDIT_GRANT_EXPIRATION_TYP
 };
 
 export const formatExpirationPeriod = (grant: CreditGrant): string => {
-	if (grant.expiration_type === CREDIT_GRANT_EXPIRATION_TYPE.DURATION && grant.expiration_duration && grant.expiration_duration_unit) {
+	if (
+		grant.expiration_type === CREDIT_GRANT_EXPIRATION_TYPE.DURATION &&
+		grant.expiration_duration !== null &&
+		grant.expiration_duration !== undefined &&
+		grant.expiration_duration_unit
+	) {
 		const duration = grant.expiration_duration;
 		const unit = grant.expiration_duration_unit.toLowerCase();
 
