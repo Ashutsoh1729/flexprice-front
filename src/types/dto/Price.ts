@@ -31,6 +31,7 @@ export interface PriceFilter extends QueryFilter, TimeRangeFilter {
 	subscription_id?: string;
 	parent_price_id?: string;
 	meter_ids?: string[];
+	start_date_lt?: string; // ISO date string
 }
 
 export interface CreatePriceRequest {
