@@ -4,8 +4,7 @@ import { LineItem } from '@/models/Subscription';
 import { FC, useState, useCallback } from 'react';
 import { Trash2, Pencil } from 'lucide-react';
 import { ENTITY_STATUS } from '@/models/base';
-import { formatBillingPeriodForDisplay } from '@/utils/common/helper_functions';
-import { Dialog } from '@/components/ui/dialog';
+import { formatBillingPeriodForDisplay, getPriceTypeLabel } from '@/utils/common/helper_functions';
 import { PRICE_TYPE, PRICE_STATUS } from '@/models/Price';
 import { formatDateTimeWithSecondsAndTimezone } from '@/utils/common/format_date';
 
@@ -190,12 +189,12 @@ const SubscriptionLineItemTable: FC<Props> = ({ data, onEdit, onTerminate, isLoa
 			fieldName: 'display_name',
 		},
 		{
-			title: 'Billing Period',
-			render: (row) => formatBillingPeriodForDisplay(row.billing_period),
+			title: 'Price Type',
+			render: (row) => <span>{getPriceTypeLabel(row.price_type)}</span>,
 		},
 		{
-			title: 'Charge',
-			render: (row) => <div className='flex items-center gap-2'>{row.price ? <ChargeValueCell data={row.price} /> : '--'}</div>,
+			title: 'Billing Period',
+			render: (row) => formatBillingPeriodForDisplay(row.billing_period),
 		},
 		{
 			title: 'Status',
@@ -217,6 +216,10 @@ const SubscriptionLineItemTable: FC<Props> = ({ data, onEdit, onTerminate, isLoa
 					</Tooltip>
 				);
 			},
+		},
+		{
+			title: 'Charge',
+			render: (row) => <div className='flex items-center gap-2'>{row.price ? <ChargeValueCell data={row.price} /> : '--'}</div>,
 		},
 		{
 			fieldVariant: 'interactive',
@@ -264,11 +267,15 @@ const SubscriptionLineItemTable: FC<Props> = ({ data, onEdit, onTerminate, isLoa
 	return (
 		<>
 			{/* Terminate Line Item Modal */}
-			<Dialog open={showTerminateModal} onOpenChange={handleDialogChange}>
-				{selectedLineItem && (
-					<TerminateLineItemModal onCancel={handleTerminateCancel} onConfirm={handleTerminateConfirm} isLoading={isLoading} />
-				)}
-			</Dialog>
+			{selectedLineItem && (
+				<TerminateLineItemModal
+					isOpen={showTerminateModal}
+					onOpenChange={handleDialogChange}
+					onCancel={handleTerminateCancel}
+					onConfirm={handleTerminateConfirm}
+					isLoading={isLoading}
+				/>
+			)}
 
 			<Card variant='notched'>
 				<CardHeader title='Subscription Line Items' />
