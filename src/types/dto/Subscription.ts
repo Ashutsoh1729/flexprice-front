@@ -434,7 +434,7 @@ export interface UpdateSubscriptionLineItemRequest {
 }
 
 export interface DeleteSubscriptionLineItemRequest {
-	end_date?: string;
+	effective_from?: string;
 }
 
 export interface SubscriptionLineItemResponse {

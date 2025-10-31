@@ -67,7 +67,7 @@ const CustomerSubscriptionEditPage: React.FC = () => {
 		mutationFn: async ({ lineItemId, endDate }: { lineItemId: string; endDate?: string }) => {
 			const payload: DeleteSubscriptionLineItemRequest = {};
 			if (endDate) {
-				payload.end_date = endDate;
+				payload.effective_from = endDate;
 			}
 			return await SubscriptionApi.deleteSubscriptionLineItem(lineItemId, payload);
 		},
