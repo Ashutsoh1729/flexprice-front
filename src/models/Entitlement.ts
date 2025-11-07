@@ -11,12 +11,6 @@ export enum ENTITLEMENT_USAGE_RESET_PERIOD {
 	NEVER = 'NEVER',
 }
 
-export enum ENTITLEMENT_ENTITY_TYPE {
-	PLAN = 'PLAN',
-	SUBSCRIPTION = 'SUBSCRIPTION',
-	ADDON = 'ADDON',
-}
-
 export interface Entitlement extends BaseModel {
 	readonly feature: Feature;
 	readonly feature_id: string;
@@ -29,4 +23,11 @@ export interface Entitlement extends BaseModel {
 	readonly tenant_id: string;
 	readonly usage_limit: number | null;
 	readonly usage_reset_period: ENTITLEMENT_USAGE_RESET_PERIOD | null;
+}
+
+export enum ENTITLEMENT_ENTITY_TYPE {
+	PLAN = 'PLAN',
+	ADDON = 'ADDON',
+	FEATURE = 'FEATURE',
+	SUBSCRIPTION = 'SUBSCRIPTION',
 }
