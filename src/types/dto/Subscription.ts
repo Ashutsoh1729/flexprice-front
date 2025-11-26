@@ -206,6 +206,9 @@ export interface CreateSubscriptionRequest {
 
 	// Entitlement overrides
 	override_entitlements?: EntitlementOverrideRequest[];
+
+	// Subscription status
+	subscription_status?: string;
 }
 
 export interface SubscriptionPhaseCreateRequest {
