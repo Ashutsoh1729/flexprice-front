@@ -433,7 +433,6 @@ const SubscriptionForm = ({
 					disabled={isDisabled}
 				/>
 			)}
-
 			{/* Conditional: Show Subscription Fields OR Phases */}
 			{state.selectedPlan && phases.length === 0 && (
 				<>
