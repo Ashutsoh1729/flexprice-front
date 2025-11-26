@@ -132,6 +132,7 @@ const CreateCustomerSubscriptionPage: React.FC = () => {
 	const navigate = useNavigate();
 	const updateBreadcrumb = useBreadcrumbsStore((state) => state.updateBreadcrumb);
 
+	const [isDraft, setIsDraft] = useState(false);
 	const { data: customerTaxAssociations } = useQuery({
 		queryKey: ['customerTaxAssociations', customerId],
 		queryFn: async () => {
@@ -260,8 +261,9 @@ const CreateCustomerSubscriptionPage: React.FC = () => {
 		mutationFn: async (data: CreateSubscriptionRequest) => {
 			return await SubscriptionApi.createSubscription(data);
 		},
-		onSuccess: async () => {
-			toast.success('Subscription created successfully');
+		onSuccess: async (_, variables) => {
+			const isDraft = variables.subscription_status === 'draft';
+			toast.success(isDraft ? 'Draft subscription saved successfully' : 'Subscription created successfully');
 
 			refetchQueries(['debug-customers']);
 			refetchQueries(['debug-subscriptions']);
@@ -273,7 +275,7 @@ const CreateCustomerSubscriptionPage: React.FC = () => {
 		},
 	});
 
-	const handleSubscriptionSubmit = () => {
+	const handleSubscriptionSubmit = (isDraftParam: boolean = false) => {
 		const {
 			billingPeriod,
 			selectedPlan,
@@ -383,9 +385,19 @@ const CreateCustomerSubscriptionPage: React.FC = () => {
 			tax_rate_overrides: tax_rate_overrides.length > 0 ? tax_rate_overrides : undefined,
 			override_entitlements: Object.keys(entitlementOverrides).length > 0 ? Object.values(entitlementOverrides) : undefined,
 			credit_grants: creditGrants.length > 0 ? creditGrants.map(internalToCreateRequest) : undefined,
+			subscription_status: isDraftParam ? 'draft' : undefined,
 		};
 
+		setIsDraft(isDraftParam);
 		createSubscription(payload);
+	};
+
+	const handleDraftSubmit = () => {
+		handleSubscriptionSubmit(true);
+	};
+
+	const handleRegularSubmit = () => {
+		handleSubscriptionSubmit(false);
 	};
 
 	const navigateBack = () => navigate(`${RouteNames.customers}/${customerId}`);
@@ -418,11 +430,16 @@ const CreateCustomerSubscriptionPage: React.FC = () => {
 				/>
 
 				{subscriptionState.selectedPlan && !subscription_id && (
-					<div className='flex items-center justify-start space-x-4'>
-						<Button onClick={navigateBack} variant={'outline'}>
-							Cancel
-						</Button>
-						<Button onClick={handleSubscriptionSubmit} isLoading={isCreating}>
+					<div className='flex items-center justify-between'>
+						<div className='flex items-center space-x-4'>
+							<Button onClick={navigateBack} variant={'outline'} disabled={isCreating}>
+								Cancel
+							</Button>
+							<Button onClick={handleDraftSubmit} isLoading={isCreating && isDraft} variant={'outline'} disabled={isCreating}>
+								Save as Draft
+							</Button>
+						</div>
+						<Button onClick={handleRegularSubmit} isLoading={isCreating && !isDraft} disabled={isCreating}>
 							Add Subscription
 						</Button>
 					</div>
