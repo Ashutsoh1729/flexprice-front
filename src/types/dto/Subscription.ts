@@ -209,6 +209,8 @@ export interface CreateSubscriptionRequest {
 
 	// True up flag
 	enable_true_up: boolean;
+	// Subscription status
+	subscription_status?: string;
 }
 
 export interface SubscriptionPhaseCreateRequest {
