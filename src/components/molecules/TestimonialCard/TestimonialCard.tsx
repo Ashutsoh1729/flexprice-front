@@ -18,13 +18,21 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({ testimonial, logoHeig
 				'bg-white rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.04)] border w-[300px] border-gray-200 flex flex-col gap-4 p-6',
 				'transition-shadow hover:shadow-xl',
 			)}>
-			<div className='flex items-center justify-between mb-1'>
+			<div className='flex items-center justify-between gap-2 mb-1'>
 				<img
 					src={testimonial.companyTitleLogoUrl || testimonial.logoUrl}
 					alt={testimonial.companyName + ' logo'}
 					className={cn(logoHeightClass ? logoHeightClass + ' w-auto ' : 'max-h-8 w-auto', 'object-contain')}
 				/>
-				{testimonial.label && <div className='text-[13px] text-zinc-500 font-normal leading-tight'>{testimonial.label}</div>}
+				{testimonial.labelImageUrl ? (
+					<img src={testimonial.labelImageUrl} alt='label' className='h-4 w-auto object-contain' />
+				) : (
+					testimonial.label && (
+						<span className='text-xs font-medium text-blue-600' style={{ fontFamily: 'DM Sans, sans-serif' }}>
+							{testimonial.label}
+						</span>
+					)
+				)}
 			</div>
 			<div className={cn('text-black mb-6', 'font-normal', 'text-[13px]', 'leading-relaxed', 'font-[400]')}>
 				"{testimonial.testimonial}"
