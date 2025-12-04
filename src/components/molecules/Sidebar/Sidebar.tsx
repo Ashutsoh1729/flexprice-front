@@ -11,6 +11,11 @@ const AppSidebar: React.FC<React.ComponentProps<typeof Sidebar>> = ({ ...props }
 	const { open: sidebarOpen } = useSidebar();
 	const navMain: NavItem[] = [
 		{
+			title: 'Home',
+			url: RouteNames.home,
+			icon: LayoutPanelLeft,
+		},
+		{
 			title: 'Product Catalog',
 			url: RouteNames.features,
 			icon: Layers2,
