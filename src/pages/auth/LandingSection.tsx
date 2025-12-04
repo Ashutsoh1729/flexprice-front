@@ -21,7 +21,6 @@ const testimonials: Testimonial[] = [
 		name: 'Prajwal Prakash',
 		designation: 'Co-Founder & CTO (YC 23)',
 		companyName: 'Clueso',
-		label: 'YC 23',
 	},
 	{
 		dpUrl: '/assets/company-founders/krutrim.webp',
@@ -43,6 +42,16 @@ const testimonials: Testimonial[] = [
 		companyName: 'WizCommerce',
 	},
 	{
+		dpUrl: '/assets/company-founders/simplismart.webp',
+		logoUrl: '/assets/svg/simplismart_logo.svg',
+		testimonial:
+			'Flexprice has completely transformed how we handle billing. Setting up usage-based pricing was a breeze, and their SDKs fit right into our stack.',
+		name: 'Shubhendu Shishir',
+		designation: 'Head of Engineering',
+		companyName: 'Simplismart',
+		label: 'Series A',
+	},
+	{
 		dpUrl: '/assets/company-founders/truffle-ai.webp',
 		logoUrl: '/assets/svg/truffle-ai.svg',
 		testimonial:
@@ -50,7 +59,6 @@ const testimonials: Testimonial[] = [
 		name: 'Shaunak Srivastava',
 		designation: 'Co-founder (YC 25)',
 		companyName: 'Truffle AI',
-		label: 'YC 25',
 	},
 ];
 
