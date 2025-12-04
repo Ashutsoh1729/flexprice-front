@@ -4,16 +4,16 @@ import SidebarNav, { NavItem } from './SidebarMenu';
 import FlexpriceSidebarFooter from './SidebarFooter';
 import { RouteNames } from '@/core/routes/Routes';
 import { EnvironmentSelector } from '@/components/molecules';
-import { Settings, Landmark, Layers2, LayoutPanelLeft, CodeXml, Puzzle, LayoutDashboardIcon } from 'lucide-react';
+import { Settings, Landmark, Layers2, LayoutPanelLeft, CodeXml, Puzzle, Home } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const AppSidebar: React.FC<React.ComponentProps<typeof Sidebar>> = ({ ...props }) => {
 	const { open: sidebarOpen } = useSidebar();
 	const navMain: NavItem[] = [
 		{
-			title: 'Dashboard',
-			url: RouteNames.dashboard,
-			icon: LayoutDashboardIcon,
+			title: 'Home',
+			url: RouteNames.homeDashboard,
+			icon: Home,
 		},
 		{
 			title: 'Product Catalog',

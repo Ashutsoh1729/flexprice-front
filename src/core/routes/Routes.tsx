@@ -86,7 +86,7 @@ export const RouteNames = {
 	verifyEmail: '/auth/verify-email',
 
 	// Dashboard routes
-	dashboard: '/dashboard',
+	homeDashboard: '/home',
 
 	// usage tracking routes
 	usageTracking: '/usage-tracking',
@@ -162,7 +162,7 @@ const DefaultRoute = () => {
 	const { user } = useUser();
 	const onboardingMetadata = user?.tenant?.metadata?.[TenantMetadataKey.ONBOARDING_COMPLETED];
 	const onboardingCompleted = onboardingMetadata === 'true';
-	return <Navigate to={onboardingCompleted ? RouteNames.dashboard : RouteNames.onboarding} />;
+	return <Navigate to={onboardingCompleted ? RouteNames.homeDashboard : RouteNames.onboarding} />;
 };
 
 export const MainRouter = createBrowserRouter([
@@ -202,7 +202,7 @@ export const MainRouter = createBrowserRouter([
 				element: <DefaultRoute />,
 			},
 			{
-				path: RouteNames.dashboard,
+				path: RouteNames.homeDashboard,
 				element: <DashboardPage />,
 			},
 			{

@@ -1,5 +1,11 @@
+import { Page } from '@/components/atoms';
+
 const DashboardPage = () => {
-	return <div>DashboardPage</div>;
+	return (
+		<Page heading='Home'>
+			<div></div>
+		</Page>
+	);
 };
 
 export default DashboardPage;
