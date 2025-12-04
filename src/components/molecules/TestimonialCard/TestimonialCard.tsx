@@ -26,7 +26,9 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({ testimonial, logoHeig
 				/>
 				{testimonial.label && <div className='text-[13px] text-zinc-500 font-normal leading-tight'>{testimonial.label}</div>}
 			</div>
-			<div className={cn('text-black mb-6', 'font-normal', 'text-[13px]', 'leading-relaxed', 'font-[400]')}>{testimonial.testimonial}</div>
+			<div className={cn('text-black mb-6', 'font-normal', 'text-[13px]', 'leading-relaxed', 'font-[400]')}>
+				"{testimonial.testimonial}"
+			</div>
 			<div className='flex items-center gap-3 mt-auto '>
 				<img
 					src={testimonial.dpUrl || DUMMY_DP}

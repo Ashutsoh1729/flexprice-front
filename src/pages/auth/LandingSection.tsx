@@ -4,7 +4,7 @@ import { Testimonial } from '@/types';
 
 const testimonials: Testimonial[] = [
 	{
-		dpUrl: '/assets/company-founders/aftershoot.webp',
+		dpUrl: '/assets/company-founders/aftershoot.png',
 		logoUrl: '/assets/png/aftershoot.png',
 		testimonial:
 			"Flexprice streamlined our entire pricing workflow. We went from messy internal scripts to clean, configurable usage plans in no time, and it's been a huge relief for our team.",
@@ -14,7 +14,7 @@ const testimonials: Testimonial[] = [
 		label: 'Series A',
 	},
 	{
-		dpUrl: '/assets/company-founders/clueso.webp',
+		dpUrl: '/assets/company-founders/clueso.png',
 		logoUrl: '/assets/svg/clueso.svg',
 		testimonial:
 			'Flexprice made it super easy for us to create and sell custom plans based on usage in minutes & has eliminated our reliance on our in-house hacks.',
@@ -23,7 +23,7 @@ const testimonials: Testimonial[] = [
 		companyName: 'Clueso',
 	},
 	{
-		dpUrl: '/assets/company-founders/krutrim.webp',
+		dpUrl: '/assets/company-founders/krutrim.png',
 		logoUrl: '/assets/svg/krutrim.svg',
 		testimonial:
 			'Flexprice helped us roll out usage-based plans without any heavy lifting. We finally stopped patching together internal hacks and team bandwidth to just to charge customers properly.',
@@ -42,7 +42,7 @@ const testimonials: Testimonial[] = [
 		companyName: 'WizCommerce',
 	},
 	{
-		dpUrl: '/assets/company-founders/simplismart.webp',
+		dpUrl: '/assets/company-founders/simplismart.png',
 		logoUrl: '/assets/svg/simplismart_logo.svg',
 		testimonial:
 			'Flexprice has completely transformed how we handle billing. Setting up usage-based pricing was a breeze, and their SDKs fit right into our stack.',
@@ -52,7 +52,7 @@ const testimonials: Testimonial[] = [
 		label: 'Series A',
 	},
 	{
-		dpUrl: '/assets/company-founders/truffle-ai.webp',
+		dpUrl: '/assets/company-founders/truffleai.png',
 		logoUrl: '/assets/svg/truffle-ai.svg',
 		testimonial:
 			'Flexprice saved us thousands of development hours that we would have spent building in-house. Managing pricing plans and experimenting with models is now effortless.',
