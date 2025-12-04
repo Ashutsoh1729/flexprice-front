@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import SubscriptionApi from '@/api/SubscriptionApi';
 import InvoiceApi from '@/api/InvoiceApi';
 import CostSheetApi from '@/api/CostSheetApi';
+import EnvironmentApi from '@/api/EnvironmentApi';
 import { SUBSCRIPTION_STATUS } from '@/models';
 import { PAYMENT_STATUS } from '@/constants/payment';
 import { SortDirection } from '@/types/common/QueryBuilder';
@@ -14,12 +15,14 @@ export const useRecentSubscriptions = () => {
 		return { start: startDate.toISOString(), end: endDate.toISOString() };
 	}, []);
 
+	const environmentId = EnvironmentApi.getActiveEnvironmentId();
+
 	const {
 		data: recentSubscriptions,
 		isLoading: subscriptionsLoading,
 		error: subscriptionsError,
 	} = useQuery({
-		queryKey: ['subscriptions', 'recent', last24Hours],
+		queryKey: ['subscriptions', 'recent', environmentId, last24Hours],
 		queryFn: async () => {
 			return await SubscriptionApi.searchSubscriptions({
 				limit: 100,
@@ -51,6 +54,11 @@ export const useRecentSubscriptions = () => {
 				],
 			});
 		},
+		staleTime: 0, // No caching
+		gcTime: 0, // No garbage collection time
+		refetchOnWindowFocus: true,
+		refetchOnMount: true,
+		enabled: !!environmentId, // Only run if environment ID exists
 	});
 
 	const subscriptionsByPlan = useMemo(() => {
@@ -97,12 +105,14 @@ export const useRevenueData = () => {
 		return ranges;
 	}, []);
 
+	const environmentId = EnvironmentApi.getActiveEnvironmentId();
+
 	const {
 		data: revenueData,
 		isLoading: revenueLoading,
 		error: revenueError,
 	} = useQuery({
-		queryKey: ['revenue', 'monthly', monthRanges],
+		queryKey: ['revenue', 'monthly', environmentId, monthRanges],
 		queryFn: async () => {
 			const results = await Promise.all(
 				monthRanges.map(async (range) => {
@@ -127,6 +137,11 @@ export const useRevenueData = () => {
 			);
 			return results;
 		},
+		staleTime: 0, // No caching
+		gcTime: 0, // No garbage collection time
+		refetchOnWindowFocus: true,
+		refetchOnMount: true,
+		enabled: !!environmentId, // Only run if environment ID exists
 	});
 
 	return {
@@ -137,18 +152,25 @@ export const useRevenueData = () => {
 };
 
 export const useInvoiceIssues = () => {
+	const environmentId = EnvironmentApi.getActiveEnvironmentId();
+
 	const {
 		data: failedPaymentInvoices,
 		isLoading: failedPaymentLoading,
 		error: failedPaymentError,
 	} = useQuery({
-		queryKey: ['invoices', 'payment-failed'],
+		queryKey: ['invoices', 'payment-failed', environmentId],
 		queryFn: async () => {
 			return await InvoiceApi.getAllInvoices({
 				payment_status: PAYMENT_STATUS.FAILED,
 				limit: 100,
 			});
 		},
+		staleTime: 0, // No caching
+		gcTime: 0, // No garbage collection time
+		refetchOnWindowFocus: true,
+		refetchOnMount: true,
+		enabled: !!environmentId, // Only run if environment ID exists
 	});
 
 	const {
@@ -156,13 +178,18 @@ export const useInvoiceIssues = () => {
 		isLoading: pastDueLoading,
 		error: pastDueError,
 	} = useQuery({
-		queryKey: ['subscriptions', 'past-due'],
+		queryKey: ['subscriptions', 'past-due', environmentId],
 		queryFn: async () => {
 			return await SubscriptionApi.listSubscriptions({
 				subscription_status: [SUBSCRIPTION_STATUS.PAST_DUE],
 				limit: 100,
 			});
 		},
+		staleTime: 0, // No caching
+		gcTime: 0, // No garbage collection time
+		refetchOnWindowFocus: true,
+		refetchOnMount: true,
+		enabled: !!environmentId, // Only run if environment ID exists
 	});
 
 	return {

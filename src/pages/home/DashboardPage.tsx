@@ -2,6 +2,7 @@ import { useEffect, useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Page, Loader } from '@/components/atoms';
 import EventsApi from '@/api/EventsApi';
+import EnvironmentApi from '@/api/EnvironmentApi';
 import toast from 'react-hot-toast';
 import { GetMonitoringDataRequest } from '@/types';
 import { WindowSize } from '@/models';
@@ -67,20 +68,26 @@ const DashboardPage = () => {
 		return () => clearTimeout(timeoutId);
 	}, [monitoringApiParams]);
 
+	const environmentId = EnvironmentApi.getActiveEnvironmentId();
+
 	const {
 		data: monitoringData,
 		isLoading: monitoringLoading,
 		error: monitoringError,
 	} = useQuery({
-		queryKey: ['monitoring', 'dashboard', debouncedMonitoringParams],
+		queryKey: ['monitoring', 'dashboard', environmentId, debouncedMonitoringParams],
 		queryFn: async () => {
 			if (!debouncedMonitoringParams) {
 				throw new Error('Monitoring API parameters not available');
 			}
 			return await EventsApi.getMonitoringData(debouncedMonitoringParams);
 		},
-		enabled: !!debouncedMonitoringParams,
+		enabled: !!debouncedMonitoringParams && !!environmentId,
 		refetchInterval: 30000, // Refetch every 30 seconds for real-time monitoring
+		staleTime: 0, // No caching
+		gcTime: 0, // No garbage collection time
+		refetchOnWindowFocus: true,
+		refetchOnMount: true,
 	});
 
 	useEffect(() => {
